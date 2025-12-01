@@ -47,7 +47,7 @@ jobs:
             VERSION="${{ github.ref_name }}"
             IS_LATEST="true"
           else
-            VERSION="php-${PHP_VERSION}"
+            VERSION="${PHP_VERSION}"
           fi
 
           # Only tag as latest if PHP version matches the latest version
