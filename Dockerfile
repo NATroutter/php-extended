@@ -1,7 +1,7 @@
 FROM php:8.5-fpm-alpine
 
 # Install dependencies
-RUN apk add --no-cache \
+RUN apk add --no-cache --quiet \
 	mysql-client \
 	freetype-dev \
 	libjpeg-turbo-dev \
@@ -10,9 +10,10 @@ RUN apk add --no-cache \
 	curl-dev \
 	libxml2-dev \
 	oniguruma-dev \
-	memcached-dev \
+	libmemcached-dev \
 	icu-dev \
-	build-base
+	build-base \
+	autoconf
 
 # Install PHP extensions
 RUN docker-php-ext-install -j$(nproc) \
