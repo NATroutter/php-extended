@@ -14,7 +14,6 @@ This Docker image provides a production-ready PHP FPM environment with essential
 - **Zip Support** - ZIP file creation and extraction
 - **Caching Layers** - Memcached and Redis for distributed caching and session storage
 - **Math Support** - BCMath extension for arbitrary precision arithmetic
-- **OpCache Enabled** - Performance optimization for PHP code (pre-installed)
 - **Minimal Footprint** - Alpine Linux keeps the image size lean
 - **Dynamic PHP Versions** - Build with different PHP versions using build arguments
 
