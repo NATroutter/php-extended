@@ -90,22 +90,11 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           body: |
-            ## Docker Image
-
-            **Image:** `${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ steps.vars.outputs.version }}`
-
-            **Tags:**
-            - `${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ steps.vars.outputs.version }}`
-            - `${{ env.REGISTRY }}/${{ env.IMAGE }}:latest`
-
-            **PHP Version:** ${{ steps.vars.outputs.php_version }}
-
             ## Pull Command
             ```bash
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ steps.vars.outputs.version }}
+
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
             ```
 
-            ## Features
-            - PHP ${{ steps.vars.outputs.php_version }} FPM on Alpine Linux
-            - Extensions: pdo_mysql, zip, gd, bcmath, memcached, redis
-            - Optimized for production use
+            **PHP Version:** ${{ steps.vars.outputs.php_version }}
