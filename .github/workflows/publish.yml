@@ -4,6 +4,11 @@ on:
   push:
     branches: [ "master", "main" ]
   workflow_dispatch:
+    inputs:
+      php_version:
+        description: 'PHP Version'
+        required: false
+        default: '8.5'
 
 env:
   REGISTRY: ghcr.io
@@ -35,8 +40,11 @@ jobs:
         with:
           context: .
           push: true
+          build-args: |
+            PHP_VERSION=${{ github.event.inputs.php_version || '8.5' }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE }}:php-${{ github.event.inputs.php_version || '8.5' }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.description=PHP FPM Alpine Docker Image with extended functionality
