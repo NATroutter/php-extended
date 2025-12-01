@@ -42,16 +42,16 @@ jobs:
           PHP_VERSION="${{ github.event.inputs.php_version || env.LATEST_PHP_VERSION }}"
           IS_LATEST="${{ github.event.inputs.is_latest || (github.ref == 'refs/heads/main' && 'true' || 'false') }}"
 
-          # If triggered by tag, use tag as version
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            VERSION="${{ github.ref_name }}"
-            IS_LATEST="true"
-          else
-            VERSION="${PHP_VERSION}"
-          fi
+          # Always use PHP version as the image tag
+          VERSION="${PHP_VERSION}"
 
           # Only tag as latest if PHP version matches the latest version
-          if [[ "${PHP_VERSION}" != "${{ env.LATEST_PHP_VERSION }}" ]] && [[ "${{ github.ref }}" != refs/tags/* ]]; then
+          if [[ "${PHP_VERSION}" != "${{ env.LATEST_PHP_VERSION }}" ]] && [[ "${{ github.ref }}" != refs/heads/main ]]; then
+            IS_LATEST="false"
+          fi
+
+          # Tag as latest only when pushing to main branch or manually triggered
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
             IS_LATEST="false"
           fi
 
