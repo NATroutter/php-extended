@@ -11,7 +11,8 @@ RUN apk add --no-cache \
 	libxml2-dev \
 	oniguruma-dev \
 	memcached-dev \
-	icu-dev
+	icu-dev \
+	build-base
 
 # Install PHP extensions
 RUN docker-php-ext-install -j$(nproc) \
