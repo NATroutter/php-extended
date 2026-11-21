@@ -1,0 +1,53 @@
+name: Daily PHP Docker Build and Publish
+
+on:
+  schedule:
+    - cron: '15 21 * * *'
+      timezone: 'Europe/Helsinki'
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE: natroutter/php-extended
+
+jobs:
+  build:
+    name: Build and publish PHP ${{ matrix.php_version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php_version: ['8.3', '8.5']
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          pull: true
+          push: true
+          build-args: |
+            PHP_VERSION=${{ matrix.php_version }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ matrix.php_version }}
+            ${{ matrix.php_version == '8.5' && format('{0}/{1}:latest', env.REGISTRY, env.IMAGE) || '' }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.description=PHP FPM Alpine Docker Image with extended functionality
+            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.version=${{ matrix.php_version }}
